@@ -1,0 +1,120 @@
+﻿@model TeknolivaProje.Web.ViewModels.RouteViewModel
+@{
+
+  ViewBag.Title = "Güzergah Tanımla";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid" style="margin-top: 10px;">
+
+
+  <div class="row">
+    <div class="col-lg-6">
+      <h2 class="page-header">
+        Güzergah Ekle
+      </h2>
+
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-6">
+
+
+      @using (Html.BeginForm("Index", "Guzergah", FormMethod.Post, new { role = "form" }))
+      {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+          <label> Şehir</label>
+          @Html.DropDownListFor(m=>m.CityId,new SelectList(ViewBag.SehirList,"CITY_ID","CITY_NAME"),("Seçiniz"),new{@class="form-control",id="CityViewModelId"})
+        </div>
+        <div class="form-group">
+          <label> Güzergah Tip</label>
+          @Html.DropDownListFor(m=>m.RouteTypeId,new SelectList(ViewBag.GuzergahTipList,"ROUTE_TYPE_ID","ROUTE_TYPE_NAME"),("Seçiniz"),new{@class="form-control",id="RouteTypeViewModelId"})
+        </div>
+        <div class="form-group col-md-12">
+          <div class="form-group col-md-6">
+            <label> Güzergah</label>
+            @Html.TextBoxFor(m => m.RouteName, new { @class = "form-control", placeholder = "Güzergah" })
+          </div>
+
+
+          <div class="form-group col-md-6">
+            <label>Güzergah Toplam Süre</label>
+            @Html.TextBoxFor(m => m.TotalDuration, new { @class = "form-control", max = "999", min = "0", placeholder = "Toplam Süre", type = "number" })
+          </div>
+          <div class="form-group col-md-6">
+            <label>Kuzey Otoparkı Peron No</label>
+            @Html.TextBoxFor(m => m.PeronNo, new { @class = "form-control", min = "0", max = "99", placeholder = "Peron No", type = "number" })
+
+          </div>
+          <div class="form-group col-md-6">
+            <label>Servis Araç Türü </label>
+
+            <select name="VehicleType" class="form-control">
+             
+              <option value="1" selected="selected">Minibüs</option>
+              <option value="2">Dolmuş</option>
+              <option value="3">Otobüs</option>
+            </select>
+
+          </div>
+          <div class="form-group col-md-12">
+            <label>Servic Aracı</label>
+            @Html.TextBoxFor(m => m.VehiclePlate, new { @class = "form-control", placeholder = "Araç Plakası" })
+          </div>
+
+        </div>
+        <div class="form-group" style="margin-top: 10px;">
+          <input type="submit" value="Ekle" class="btn btn-success" id="btnGuzergahEkle" />
+        </div>
+        <div>
+          @Html.ValidationSummary("", new { @class = "text-danger", style = "margin-top:10px;" })
+        </div>
+                }
+      @Html.Partial("_Hata")
+    </div>
+  </div>
+  <div class="row">
+    @{
+      Html.RenderAction("GuzergahListe", "Guzergah");
+    }
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+
+      <a class="btn btn-primary" href="@Url.Action("Liste","Home")">Listeden Sorgu</a>
+      <input type="button" class="btn btn-success btnYazdir" value="Yazıcıya Gönder" />
+
+    </div>
+  </div>
+</div>
+@section scripts
+{
+  @Scripts.Render("~/bundles/jqueryval")
+  @Scripts.Render("~/bundles/deletejs")
+  <script src="~/Scripts/jQuery.print.js"></script>
+
+  <script>
+    $(function () {
+
+      veriSil(".btnGuzergahSil", "/Guzergah/Sil/", "Güzergah silindi");
+
+      $(".btnYazdir").on('click',
+        function () {
+          $("#guzergahYazdir").print(
+            {
+              noPrintSelector: ".noPrint",
+              title: "Güzergah Listesi"
+            }
+          );
+        });
+
+    })
+
+  </script>
+
+}

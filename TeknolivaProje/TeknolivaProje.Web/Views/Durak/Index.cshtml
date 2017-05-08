@@ -1,0 +1,110 @@
+﻿@model TeknolivaProje.Web.ViewModels.StationViewModel
+@{
+
+  ViewBag.Title = "Durak Tanımla";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid" style="margin-top: 10px;">
+
+
+  <div class="row">
+    <div class="col-lg-6">
+      <h2 class="page-header">
+        Durak Ekle
+      </h2>
+
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-6">
+
+
+      @using (Html.BeginForm("Index", "Durak", FormMethod.Post, new { role = "form" }))
+      {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+          <label>Güzergah</label>
+          @Html.DropDownListFor(m=>m.RouteViewModelId,new SelectList(ViewBag.GuzergahList,"ROUTE_ID","ROUTE_NAME"),("Seçiniz"),new{@class="form-control",id="RouteViewModelId"})
+        </div>
+       
+        <div class="form-group col-md-12">
+          <div class="form-group col-md-6">
+            <label>Durak İsmi</label>
+            @Html.TextBoxFor(m => m.StationName, new { @class = "form-control", placeholder = "Durak İsmi" })
+          </div>
+
+
+          <div class="form-group col-md-6">
+            <label>Durak No</label>
+            @Html.TextBoxFor(m => m.StationNo, new { @class = "form-control", max = "99", min = "0", placeholder = "Durak Numarası", type = "number" })
+          </div>
+          <div class="form-group col-md-6">
+            <label>Kalkış Saati</label>
+            @Html.TextBoxFor(m=>m.DepartureTime,new{@class="form-control",placeholder="Örn: 13:55"})
+           
+          </div>
+          <div class="form-group col-md-6">
+            <label>Varış Saati</label>
+            @Html.TextBoxFor(m => m.ArrivalTime, new { @class = "form-control", placeholder = "Örn: 15:55"})
+
+          </div>
+        
+     
+        </div>
+        <div class="form-group" style="margin-top: 10px;">
+          <input type="submit" value="Ekle" class="btn btn-success" id="btnDurakEkle" />
+        </div>
+        <div>
+          @Html.ValidationSummary("", new { @class = "text-danger", style = "margin-top:10px;" })
+        </div>
+      }
+      @Html.Partial("_Hata")
+    </div>
+  </div>
+  <div class="row">
+    @{
+      Html.RenderAction("DurakListe", "Durak");
+    }
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+
+      <a class="btn btn-primary" href="@Url.Action("Liste","Home")">Listeden Sorgu</a>
+      <input type="button" class="btn btn-success btnYazdir" value="Yazıcıya Gönder" />
+
+    </div>
+  </div>
+</div>
+@section scripts
+{
+  @Scripts.Render("~/bundles/jqueryval")
+  @Scripts.Render("~/bundles/deletejs")
+  <script src="~/Scripts/jQuery.print.js"></script>
+
+  <script>
+    $(function () {
+
+      sehirList();
+      guzergahTipList();
+      veriSil(".btnDurakSil", "/Durak/Sil/", "Durak silindi");
+
+      $(".btnYazdir").on('click',
+        function () {
+          $("#durakYazdir").print(
+            {
+              noPrintSelector: ".noPrint",
+              title: "Durak Listesi"
+            }
+          );
+        });
+
+    })
+
+  </script>
+
+}

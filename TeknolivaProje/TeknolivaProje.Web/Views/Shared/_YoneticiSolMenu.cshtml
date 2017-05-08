@@ -1,0 +1,34 @@
+﻿@using TeknolivaProje.Web.Helpers
+@{
+  Layout = null;
+}
+<!-- Sol Menü -->
+<div class="row">
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav side-nav menu">
+      <li class="active">
+        <a href="@Url.Action("Index","Home")"><i class="fa fa-fw fa-dashboard"></i> @UserHelper.GetUser(Session["Yonetici"].ToString()).USERNAME</a>
+      </li>
+      <li>
+        <a href="@Url.Action("Index","Sehir")"><i class="fa fa-home" aria-hidden="true"></i> Şehir Tanımlama</a>
+      </li>
+      <li>
+        <a href="@Url.Action("Index","GuzergahTip")"><i class="fa fa-edit" aria-hidden="true"></i> Güzergah Tip Tanımlama</a>
+      </li>
+      <li>
+        <a href="@Url.Action("Index","Guzergah")"><i class="fa fa-road" aria-hidden="true"></i> Güzergah Tanımlama</a>
+      </li>
+      <li>
+        <a href="@Url.Action("Index","Durak")"><i class="fa fa-bus" aria-hidden="true"></i> Durak Tanımlama </a>
+      </li>
+      <li>
+        <a href="@Url.Action("Excel","Yonetici")"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel'e Veri Aktar</a>
+      </li>
+      <li>
+        <a href="@Url.Action("CikisYap","Hesap")"><i class="fa fa-sign-out" aria-hidden="true"></i> Çıkış Yap</a>
+      </li>
+
+    </ul>
+  </div>
+</div>
+<!--  Sol Menü Sonu -->

@@ -1,0 +1,77 @@
+﻿@model IEnumerable<TeknolivaProje.Data.Models.STATION>
+<div class="col-md-12">
+  <h2>Durak Listesi</h2>
+  <hr />
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover" id="durakYazdir">
+      <thead>
+        <tr class="info">
+          <th>Şehir</th>
+          <th>Güzergah Tip</th>
+          <th>Güzergah</th>
+          <th>Durak İsmi</th>
+          <th>Durak No</th>
+          <th>Kalkış Saati</th>
+          <th>Varış Saati</th>
+
+          <th class="noPrint">İşlemler</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var item in Model)
+        {
+          <tr>
+
+            <td>
+
+              <label>
+                @item.ROUTE.CITY.CITY_NAME
+              </label>
+
+            </td>
+            <td>
+              <label>
+                @item.ROUTE.ROUTE_TYPE.ROUTE_TYPE_NAME
+              </label>
+            </td>
+            <td>
+              <label>
+                @item.ROUTE.ROUTE_NAME
+              </label>
+            </td>
+            <td>
+              <label>
+                @item.STATION_NAME
+              </label>
+            </td>
+            <td>
+              <label>
+                @item.STATION_NO
+              </label>
+            </td>
+
+            <td>
+              <label>
+                @item.DEPARTURE_TIME
+              </label>
+            </td>
+            <td>
+              <label>
+                @item.ARRIVAL_TIME
+              </label>
+            </td>
+            <td class="noPrint">
+              <a href="/Durak/Duzenle/@item.STATION_ID" class="btn btn-warning">Düzenle</a>
+
+              <button data-id="@item.STATION_ID" class="btn btn-danger btnDurakSil">Sil</button>
+            </td>
+
+          </tr>
+
+
+        }
+
+      </tbody>
+    </table>
+  </div>
+</div>

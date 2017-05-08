@@ -1,0 +1,179 @@
+﻿@{
+  ViewBag.Title = "Ana Sayfa";
+}
+<div class="container-fluid" style="margin-top: 10px;" id="vue-genel">
+
+
+  <div class="row">
+    <div class="col-lg-6">
+      <h2 class="page-header">
+        PERSONEL SERVİSLERİ
+      </h2>
+
+    </div>
+  </div>
+
+
+  <div class="row" >
+    <div class="col-md-6">
+      <div class="form-group">
+        <label> Şehir</label>
+        <select name="Sehir" class="form-control" id="Sehir" v-model="citySelected" v-on:change="cityChanged()">
+          <option selected="selected" value="0">Seçiniz</option>
+          <option v-for="city in cityData" v-bind:value="city.Id">{{city.CityName}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label> Güzergah Tip</label>
+        <select v-bind:disabled="citySelected==0" name="GuzergahTip" class="form-control" id="GuzergahTip" v-model="routeTypeSelected" v-on:change="routeTypeChanged()">
+          <option selected="selected" value="0">Seçiniz</option>
+          <option v-for="routeType in routeTypeData" v-bind:value="routeType.Id">{{routeType.RouteTypeName}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label> Güzergah</label>
+        <select name="Guzergah" id="Guzergah" class="form-control" v-bind:disabled="citySelected==0 || routeTypeSelected==0"
+                v-model="routeSelected" v-on:change="routeChanged()">
+          <option selected="selected" value="0"> Seçiniz</option>
+          <option v-for="route in routeData" v-bind:value="route.Id">{{route.RouteName}}</option>
+        </select>
+      </div>
+
+
+      <div class="form-group">
+        <label>Durak</label>
+        <select name="Durak" id="Durak" class="form-control" v-bind:disabled="citySelected==0 || routeTypeSelected==0 || routeSelected==0"
+                v-model="stationSelected" v-on:change="stationChanged()">
+          <option value="0">Seçiniz</option>
+          <option v-for="station in stationData" v-bind:value="station.Id">{{station.StationName}}</option>
+        </select>
+      </div>
+
+
+    </div>
+    <div class="col-md-12" id="vue-data" v-if="isResult">
+      <div class="form-group col-md-3">
+        <label>Güzergah Toplam Süre </label><br />
+        <input type="text" disabled="disabled" v-bind:value="resultData.TotalDuration | sure" class="form-control" />
+      </div>
+      <div class="form-group col-md-3">
+        <label>Peron No</label><br />
+        <input type="text" disabled="disabled" v-bind:value="resultData.PeronNo" class="form-control" />
+      </div>
+      <div class="form-group col-md-3">
+        <label>Servis Aracı </label><br />
+        <input type="text" disabled="disabled" v-bind:value="resultData.VehicleType" class="form-control" />
+      </div>
+      <div class="form-group col-md-3">
+        <label>Servis Araç Plaka </label><br />
+        <input type="text" disabled="disabled" v-bind:value="resultData.VehiclePlate" class="form-control" />
+      </div>
+      <div class="form-group col-md-3">
+        <label>Durak Adı</label>
+        <input type="text" disabled="disabled" v-bind:value="resultData.StationName" class="form-control" />
+        <b></b>
+      </div>
+      <div class="form-group col-md-3">
+        <label>Durak No</label>
+        <input type="text" disabled="disabled" v-bind:value="resultData.StationNo" class="form-control" />
+      </div>
+      <div class="form-group col-md-3">
+        <label>Varış Saati(Tmmt'den)</label>
+        <input type="text" disabled="disabled" v-bind:value="resultData.ArrivalTime" class="form-control" />
+      </div>
+      <div class="form-group col-md-3">
+        <label>Kalkış Saati(Tmmt'ye)</label>
+        <input type="text" disabled="disabled" v-bind:value="resultData.DepartureTime" class="form-control" />
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+
+      <a class="btn btn-primary" href="@Url.Action("Liste","Home")">Listeden Sorgu</a>
+      <input type="button" class="btn btn-success btnYazdir" value="Yazıcıya Gönder" v-bind:disabled="isPrint==false" />
+      <a :href="'/Home/Detay/' + resultData.Id" v-if="isPrint">Detaylı Bilgi</a>
+    </div>
+  </div>
+</div>
+@section scripts
+{
+  <script src="~/Scripts/jQuery.print.js"></script>
+  <script src="https://unpkg.com/vue"></script>
+  <script src="https://cdn.jsdelivr.net/vue.resource/1.3.1/vue-resource.min.js"></script>
+  <script>
+    $(function () {
+
+
+   
+
+      Vue.filter('sure', function (value) {
+        return value + " dk";
+      });
+
+        var app = new Vue({
+          el: "#vue-genel",
+          data: {
+            citySelected: 0,
+            routeTypeSelected: 0,
+            routeSelected: 0,
+            stationSelected: 0,
+            routeTypeData: {},
+            routeData: {},
+            cityData: {},
+            stationData: {},
+            isResult: false,
+            resultData: {},
+            isPrint: false
+      },
+        methods: {
+          cityChanged() {
+
+            if (this.citySelected != 0 || this.routeTypeSelected != 0 || this.routeSelected != 0) {
+              this.$http.get('/Json/JsonGuzergahList/' + this.citySelected + '/' + this.routeTypeSelected).then(res => { this.routeData = res.body });
+              this.$http.get('/Json/JsonDurakList/' + this.routeSelected).then(res => { this.stationData = res.body });
+            }
+          },
+          routeTypeChanged() {
+
+            this.$http.get('/Json/JsonGuzergahList/' + this.citySelected + '/' + this.routeTypeSelected)
+              .then(res => { this.routeData = res.body });
+          },
+          routeChanged() {
+            this.$http.get('/Json/JsonDurakList/' + this.routeSelected).then(res => { this.stationData = res.body });
+          },
+          stationChanged() {
+            if (this.stationSelected != 0) {
+              
+      
+            this.$http.get('/Json/JsonBilgi/' + this.stationSelected).then(res => { this.resultData = res.body });
+            this.isResult = true;
+            this.isPrint = true;
+            }
+          },
+
+
+
+        },
+        created: function () {
+          this.$http.get('/Json/JsonSehirList').then(res => { this.cityData = res.body; });
+          this.$http.get('/Json/JsonGuzergahTipList').then(res => { this.routeTypeData = res.body });
+        }
+      });
+      $(".btnYazdir").on('click',
+        function () {
+          $("#vue-data").print(
+            {
+              noPrintSelector: ".noPrint",
+              title: "Durak Bilgileri" 
+            }
+          );
+          });
+     
+    })
+
+  </script>
+}

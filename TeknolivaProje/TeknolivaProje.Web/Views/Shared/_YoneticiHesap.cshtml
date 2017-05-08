@@ -1,0 +1,33 @@
+﻿<!-- Giriş / Çıkış Menü -->
+
+
+@{
+  if (Session["Yonetici"] == null)
+  {
+    <div class="nav navbar-right top-nav" style="margin-top: 4px; margin-right: 1px">
+      <a href="@Url.Action("Giris","Hesap")" class="btn btn-success">Yönetici Girişi</a>
+    </div>
+  }
+  else
+  {
+
+
+    <ul class="nav navbar-right top-nav">
+
+
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color:white"><i class="fa fa-user"></i> <b>Sistem Yöneticisi</b>  <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+
+          <li>
+            <a href="@Url.Action("CikisYap","Hesap")"><i class="fa fa-fw fa-power-off"></i> Çıkış Yap</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <!-- Yönetici Paneli -->
+    @Html.Partial("_YoneticiSolMenu")
+    <!-- /. Yönetici Paneli-->
+  }
+}
+<!-- /.Giriş Çıkış Menü -->

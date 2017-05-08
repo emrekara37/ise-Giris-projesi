@@ -1,0 +1,117 @@
+﻿@using TeknolivaProje.Web.Helpers
+@model TeknolivaProje.Data.Models.STATION
+@{
+  ViewBag.Title = Model.STATION_NAME + " Detayı ";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid" style="margin-top: 10px;" id="vue-genel">
+
+
+  <div class="row">
+    <div class="col-lg-6">
+      <h2 class="page-header">
+        @ViewBag.Title
+      </h2>
+
+    </div>
+  </div>
+
+
+  <div class="row">
+  
+    <div class="form-horizontal" id="durakDetaylari">
+      <div class="form-group">
+        <label class="control-label col-sm-2" ><i class="fa fa-home" ></i> Şehir :</label>
+        <div class="col-sm-10">
+           <label class="form-control">@Model.ROUTE.CITY.CITY_NAME</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><i class="fa fa-edit"></i> Güzergah Tip :</label>
+        <div class="col-sm-10">          
+          <label class="form-control">@Model.ROUTE.ROUTE_TYPE.ROUTE_TYPE_NAME</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><i class="fa fa-road"></i> Güzergah :</label>
+        <div class="col-sm-10">          
+          <label class="form-control">@Model.ROUTE.ROUTE_NAME</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><i class="fa fa-clock-o"></i> Güzergah Toplam Süresi :</label>
+        <div class="col-sm-10">          
+          <label class="form-control">@Model.ROUTE.TOT_DURATION dk</label>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="control-label col-sm-2"><i class="fa fa-lock"></i> Peron No :</label>
+        <div class="col-sm-10">          
+          <label class="form-control">@Model.ROUTE.PERON_NO</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><i class="fa fa-bus"></i> Servis Aracı :</label>
+        <div class="col-sm-10">          
+          <label class="form-control">@Enum.GetName(typeof(VehicleType),Model.ROUTE.VEHICLE_TYPE)</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><i class="fa fa-stop"></i>Servis Plaka:</label>
+        <div class="col-sm-10">          
+          <label class="form-control">@Model.ROUTE.VEHICLE_PLATE</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><i class="fa fa-pencil"></i> Durak Adı :</label>
+        <div class="col-sm-10">          
+          <label class="form-control">@Model.STATION_NAME</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><i class="fa fa-lock"></i> Durak No :</label>
+        <div class="col-sm-10">          
+          <label class="form-control">@Model.STATION_NO</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><i class="fa fa-clock-o"></i> Varış Saati<br/>(Tmmt'den) :</label>
+        <div class="col-sm-10">          
+          <label class="form-control">@Model.ARRIVAL_TIME</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><i class="fa fa-clock-o"></i> Kalkış Saati<br/>(Tmmt'ye):</label>
+        <div class="col-sm-10">          
+          <label class="form-control">@Model.DEPARTURE_TIME</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+
+      <a class="btn btn-primary" href="@Url.Action("Liste","Home")">Listeden Sorgu</a>
+      <input type="button" class="btn btn-success btnYazdir" value="Yazıcıya Gönder" />
+
+    </div>
+  </div>
+</div>
+@section scripts
+{
+  <script src="~/Scripts/jQuery.print.js"></script>
+  <script>
+    $(".btnYazdir").on('click',
+      function () {
+        $("#durakDetaylari").print(
+          {
+            noPrintSelector: ".noPrint",
+            title: "Durak Bilgileri - "+ '@Model.STATION_NAME'
+          }
+        );
+      });
+  </script>
+}

@@ -1,0 +1,83 @@
+﻿@model IEnumerable<TeknolivaProje.Data.Models.ROUTE>
+  @using TeknolivaProje.Web.Helpers;
+<div class="col-md-12">
+  <h2>Güzergah  Listesi</h2>
+  <hr />
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover" id="guzergahYazdir">
+      <thead>
+        <tr class="info">
+          <th>Şehir</th>
+          <th>Güzergah Tip</th>
+          <th>Güzergah</th>
+          <th>Toplam Süre</th>
+          <th>Peron No</th>
+          <th>Servis Aracı</th>
+          <th>Araç Plaka</th>
+          <th class="noPrint">İşlemler</th>
+
+        </tr>
+      </thead>
+      <tbody>
+
+
+        @foreach (var item in Model)
+        {
+
+
+
+          <tr>
+
+            <td>
+
+              <label>
+                @item.CITY.CITY_NAME
+              </label>
+
+            </td>
+            <td>
+              <label>
+                @item.ROUTE_TYPE.ROUTE_TYPE_NAME
+              </label>
+            </td>
+            <td>
+              <label>
+                @item.ROUTE_NAME
+              </label>
+            </td>
+            <td>
+              <label>
+                @item.TOT_DURATION Dk.
+              </label>
+            </td>
+            <td>
+              <label>
+                @item.PERON_NO
+              </label>
+            </td>
+            <td>
+              <label>
+                @Enum.GetName(typeof(VehicleType),item.VEHICLE_TYPE)
+              </label>
+            </td>
+            <td>
+              <label>
+                @item.VEHICLE_PLATE
+              </label>
+            </td>
+
+            <td class="noPrint">
+              <a href="/Guzergah/Duzenle/@item.ROUTE_ID" class="btn btn-warning">Düzenle</a>
+
+              <button data-id="@item.ROUTE_ID" class="btn btn-danger btnGuzergahSil">Sil</button>
+            </td>
+
+          </tr>
+
+
+        }
+
+      </tbody>
+    </table>
+  </div>
+</div>

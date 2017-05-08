@@ -1,0 +1,82 @@
+﻿@model TeknolivaProje.Web.ViewModels.RouteTypeViewModel
+@{
+
+  ViewBag.Title = "Güzergah Tip Tanımla";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid" style="margin-top: 10px;">
+
+
+  <div class="row">
+    <div class="col-lg-6">
+      <h2 class="page-header">
+        Güzergah Tip Ekle
+      </h2>
+
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-6">
+
+
+      @using (Html.BeginForm("Index", "GuzergahTip", FormMethod.Post, new { role = "form" }))
+      {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+          <label> Güzergah Tipi</label>
+          @Html.TextBoxFor(m => m.RouteTypeName, new { @class = "form-control", placeholder = "Güzergah Tip Adı Giriniz" })
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Ekle" class="btn btn-success" id="btnGuzergahEkle" />
+        </div>
+        <div>
+          @Html.ValidationSummary("", new { @class = "text-danger", style = "margin-top:10px;" })
+        </div>
+      }
+      @Html.Partial("_Hata")
+    </div>
+  </div>
+  <div class="row">
+    @{
+      Html.RenderAction("GuzergahTipListe", "GuzergahTip");
+    }
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <a class="btn btn-primary" href="@Url.Action("Liste","Home")">Listeden Sorgu</a>
+      <input type="button" class="btn btn-success btnYazdir" value="Yazıcıya Gönder" />
+
+    </div>
+  </div>
+</div>
+@section scripts
+{
+  @Scripts.Render("~/bundles/jqueryval")
+  @Scripts.Render("~/bundles/deletejs")
+  <script src="~/Scripts/jQuery.print.js"></script>
+
+  <script>
+    $(function () {
+
+      guzergahTipDuzenle();
+      veriSil(".btnGuzergahTipSil", "/GuzergahTip/Sil/", "Güzergah tip silindi");
+     
+      $(".btnYazdir").on('click',function() {
+        $("#guzergahTipleriYazdir").print(
+          {
+            noPrintSelector: ".noPrint",
+            title:"Güzergah Tip Listesi"
+          }
+        );
+      })
+
+    })
+
+  </script>
+
+}

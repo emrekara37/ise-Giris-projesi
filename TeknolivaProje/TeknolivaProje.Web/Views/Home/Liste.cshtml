@@ -1,0 +1,241 @@
+﻿@using TeknolivaProje.Web.Helpers
+@model IEnumerable<TeknolivaProje.Data.Models.STATION>
+@{
+  ViewBag.Title = "Liste";
+  Layout = null;
+
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@ViewBag.Title - TMMT Personel Güzergah Sistemi</title>
+
+  <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+  <link href="~/Scripts/Modules/dist/css/theme.bootstrap_3.min.css" rel="stylesheet" />
+  <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+  
+  <script src="~/Scripts/Modules/dist/js/jquery.tablesorter.min.js"></script>
+  <script src="~/Scripts/Modules/dist/js/jquery.tablesorter.widgets.min.js"></script>
+  <link href="~/Scripts/Modules/dist/css/jquery.tablesorter.pager.min.css" rel="stylesheet" />
+  <script src="~/Scripts/Modules/dist/js/extras/jquery.tablesorter.pager.min.js"></script>
+  
+  
+  
+  <script src="~/Scripts/jQuery.print.js"></script>
+  <link href="/Content/sb-admin.css" rel="stylesheet" />
+  <script src="/Scripts/bootstrap.min.js"></script>
+  <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body style="background: whitesmoke">
+  <div id="wrapper">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
+      <div class="navbar-header">
+
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+          <span class="sr-only"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+
+        <a class="navbar-brand" href="@Url.Action("Index","Home")">PERSONEL SERVİSLERİ </a>
+      </div>
+      @Html.Partial("_YoneticiHesap")
+
+
+
+    </nav>
+    <div class="container" style="margin-top: 10px;margin-left: 60px">
+
+
+      <div class="row">
+        <div class="col-lg-6">
+          <h2 class="page-header">
+            Detaylı Liste
+          </h2>
+
+        </div>
+      </div>
+      <div class="table-responsive col-md-12" id="listeyiYazdir">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Şehir</th>
+              <th>Güzergah<br />Tipi</th>
+              <th>Güzergah</th>
+              <th>Güzergah<br />Toplam Süresi</th>
+              <th>Peron<br />No</th>
+              <th class="filter-select filter-exact" data-placeholder="Tür">Servis<br />Aracı</th>
+              <th>Servis<br />Plaka</th>
+              <th>Durak Adı</th>
+              <th>Durak<br />No</th>
+              <th>Varış Saati<br />(Tmmt'den)</th>
+              <th>Kalkış Saati<br />(Tmmt'ye)</th>
+              <th class="noPrint">#</th>
+
+            </tr>
+          </thead>
+          <tfoot>
+
+            <tr class="noPrint">
+              <th colspan="12" class="ts-pager form-inline">
+                <div class="btn-group btn-group-sm" role="group">
+                  <button type="button" class="btn btn-default first"><span class="glyphicon glyphicon-step-backward"></span></button>
+                  <button type="button" class="btn btn-default prev"><span class="glyphicon glyphicon-backward"></span></button>
+                </div>
+                <span class="pagedisplay"></span>
+                <div class="btn-group btn-group-sm" role="group">
+                  <button type="button" class="btn btn-default next"><span class="glyphicon glyphicon-forward"></span></button>
+                  <button type="button" class="btn btn-default last"><span class="glyphicon glyphicon-step-forward"></span></button>
+                </div>
+                <select class="form-control input-sm pagesize" title="Sayfa boyutunu düzenle">
+                  <option selected="selected" value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                  <option value="all">Tümünü Göster</option>
+                </select>
+                <select class="form-control input-sm pagenum" title="Sayfa numarasını seç"></select>
+              </th>
+            </tr>
+          </tfoot>
+          <tbody>
+            @foreach (var item in Model)
+            {
+              <tr>
+                <td>@item.ROUTE.CITY.CITY_NAME</td>
+                <td>@item.ROUTE.ROUTE_TYPE.ROUTE_TYPE_NAME</td>
+                <td>@item.ROUTE.ROUTE_NAME</td>
+                <td>@item.ROUTE.TOT_DURATION dk</td>
+                <td>@item.ROUTE.PERON_NO</td>
+                <td>@Enum.GetName(typeof(VehicleType), item.ROUTE.VEHICLE_TYPE)</td>
+                <td>@item.ROUTE.VEHICLE_PLATE</td>
+                <td>@item.STATION_NAME</td>
+                <td>@item.STATION_NO</td>
+                <td>@item.ARRIVAL_TIME</td>
+                <td>@item.DEPARTURE_TIME</td>
+                <td class="noPrint">
+                  <a href="@Url.Action("Detay","Home",new{id=item.STATION_ID})" ><i class="glyphicon glyphicon-info-sign" style="color: blue; width: 16px; height: 16px;font-size: 15px" title="@item.STATION_NAME Detay"></i></a>
+                </td>
+
+              </tr>
+            }
+
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <input type="button" class="btn btn-success btnYazdir" value="Yazıcıya Gönder" />
+        </div>
+        <div class="col-md-6">
+          <div class="dropdown">
+            <button class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">
+              Seçerek Sorgula
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="btn" href="/Home/Liste?sira=1">Tarihe Göre(Azalan)</a></li>
+              <li><a  class="btn" href="/Home/Liste">Tarihe Göre(Artan)</a></li>
+
+            </ul>
+
+          </div>
+        
+        </div>
+
+
+      </div>
+      <!--/.Table-->
+    </div>
+  </div>
+  <script>
+    $(function () {
+
+
+      $.tablesorter.themes.bootstrap = {
+
+        table: 'table table-bordered table-striped',
+        caption: 'caption',
+
+        header: 'bootstrap-header',
+        sortNone: '',
+        sortAsc: '',
+        sortDesc: '',
+        active: '',
+        hover: '',
+
+        icons: '',
+        iconSortNone: 'bootstrap-icon-unsorted',
+        iconSortAsc: 'glyphicon glyphicon-chevron-up',
+        iconSortDesc: 'glyphicon glyphicon-chevron-down',
+        filterRow: 'noPrint',
+        footerRow: '',
+        footerCells: '',
+        even: '',
+        odd: ''
+      };
+
+
+      $("table").tablesorter({
+
+        theme: "bootstrap",
+
+        widthFixed: true,
+
+        headerTemplate: '{content} {icon}',
+
+
+        widgets: ["uitheme", "filter", "columns", "zebra"],
+
+        widgetOptions: {
+
+          zebra: ["even", "odd"],
+
+
+          columns: ["primary", "secondary", "tertiary"],
+
+          filter_reset: ".reset",
+
+
+          filter_cssFilter: "form-control",
+
+
+        }
+      })
+        .tablesorterPager({
+
+
+          container: $(".ts-pager"),
+
+          cssGoto: ".pagenum",
+
+          removeRows: false,
+
+
+          output: '{startRow} - {endRow} / {filteredRows} ({totalRows})'
+
+        });
+    
+   
+      $(".btnYazdir").on('click',
+        function () {
+          $("#listeyiYazdir").print(
+            {
+              noPrintSelector: ".noPrint",
+              title: "Genel Liste"
+            }
+          );
+        });
+    });
+  </script>
+</body>
+</html>
